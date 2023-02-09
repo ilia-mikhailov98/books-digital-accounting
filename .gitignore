@@ -1,6 +1,8 @@
 # Compiled class file
 *.class
 
+**/database.properties
+
 # Log file
 *.log
 
@@ -21,3 +23,24 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+**/.idea/*
+
+*.iml
+.mvn/
+.mvn
+
+build/build_private.xml
+build/build.local.properties
+
+out/*
+target/*
+
+**/tmp/
+**/.vscode
+*.un~
+*.war
+.env
+**/.settings
+**/.project
+
