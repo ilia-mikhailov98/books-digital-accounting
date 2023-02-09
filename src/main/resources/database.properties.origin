@@ -1,0 +1,9 @@
+# this file is shared so that everybody
+# can get to know which properties
+# they should use in order to run
+# the application
+
+driver=
+url=
+username=
+password=
