@@ -55,6 +55,7 @@
    - В файле `src/main/resources/database.properties` укажите настройки подключения к вашей базе данных:
 
      ```properties
+     driver=класс_драйвера
      url=jdbc:postgresql://localhost:5432/books_accounting
      username=ваш_пользователь
      password=ваш_пароль
