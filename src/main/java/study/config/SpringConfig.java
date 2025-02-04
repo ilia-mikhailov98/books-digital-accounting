@@ -7,8 +7,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.datasource.init.DataSourceInitializer;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -24,7 +27,7 @@ import java.util.Objects;
 @Configuration
 @ComponentScan("study")
 @EnableWebMvc
-@PropertySource("classpath:database.properties")
+//@PropertySource("classpath:database.properties")
 public class SpringConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;
@@ -77,5 +80,17 @@ public class SpringConfig implements WebMvcConfigurer {
     @Bean
     JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(dataSource());
+    }
+
+    @Bean
+    public DataSourceInitializer dataSourceInitializer(DataSource dataSource) {
+        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+        populator.addScript(new ClassPathResource("sql/schema.sql"));
+
+        DataSourceInitializer initializer = new DataSourceInitializer();
+        initializer.setDataSource(dataSource);
+        initializer.setDatabasePopulator(populator);
+
+        return initializer;
     }
 }

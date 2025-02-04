@@ -6,9 +6,10 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/mydatabase
-      - SPRING_DATASOURCE_USERNAME=user
-      - SPRING_DATASOURCE_PASSWORD=password
+      - driver=org.postgresql.Driver
+      - url=jdbc:postgresql://db:5432/mydatabase
+      - username=user
+      - password=password
     depends_on:
       - db
 

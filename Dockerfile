@@ -1,47 +1,11 @@
-FROM openjdk:11-jdk-slim as deps
+# Use the official Tomcat image
+FROM tomcat:8.5-jdk8-openjdk-slim
 
-WORKDIR /build
+# Remove the default web apps
+RUN rm -rf /usr/local/tomcat/webapps/*
 
-COPY --chmod=0755 mvnw mvnw
-COPY .mvn/ .mvn/
+# Copy your WAR file into the Tomcat webapps directory
+COPY target/*.war /usr/local/tomcat/webapps/your-app.war
 
-RUN --mount=type=bind,source=pom.xml,target=pom.xml \
-    --mount=type=cache,target=/root/.m2 ./mvnw dependency:go-offline -DskipTests
-
-FROM deps as package
-
-WORKDIR /build
-
-COPY ./src src/
-RUN --mount=type=bind,source=pom.xml,target=pom.xml \
-    --mount=type=cache,target=/root/.m2 \
-    ./mvnw package -DskipTests && \
-    mv target/$(./mvnw help:evaluate -Dexpression=project.artifactId -q -DforceStdout)-$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout).jar target/app.jar
-
-FROM package as extract
-
-WORKDIR /build
-
-RUN java -Djarmode=layertools -jar target/app.jar extract --destination target/extracted
-
-FROM openjdk:11-jdk-slim AS final
-
-ARG UID=10001
-RUN adduser \
-    --disabled-password \
-    --gecos "" \
-    --home "/nonexistent" \
-    --shell "/sbin/nologin" \
-    --no-create-home \
-    --uid "${UID}" \
-    appuser
-USER appuser
-
-COPY --from=extract build/target/extracted/dependencies/ ./
-COPY --from=extract build/target/extracted/spring-boot-loader/ ./
-COPY --from=extract build/target/extracted/snapshot-dependencies/ ./
-COPY --from=extract build/target/extracted/application/ ./
-
+# Expose the port Tomcat runs on
 EXPOSE 8080
-
-ENTRYPOINT [ "java", "org.springframework.boot.loader.JarLauncher" ]
