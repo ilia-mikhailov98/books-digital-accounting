@@ -10,14 +10,13 @@ import study.model.Person;
 import study.util.PersonValidator;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @RequestMapping("/people")
 public class PeopleController {
 
-    private PersonDAO personDAO;
-    private PersonValidator personValidator;
+    private final PersonDAO personDAO;
+    private final PersonValidator personValidator;
 
     @Autowired
     public PeopleController(PersonDAO personDAO, PersonValidator personValidator) {
@@ -25,7 +24,7 @@ public class PeopleController {
         this.personValidator = personValidator;
     }
 
-    @GetMapping()
+    @GetMapping
     public String allPeople(Model model) {
         model.addAttribute("people", personDAO.findAll());
 
@@ -52,7 +51,7 @@ public class PeopleController {
         return "people/new-person";
     }
 
-    @PostMapping()
+    @PostMapping
     public String createPerson(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult) {
         personValidator.validate(person, bindingResult);
 

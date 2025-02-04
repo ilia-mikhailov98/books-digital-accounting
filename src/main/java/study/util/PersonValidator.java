@@ -10,7 +10,7 @@ import study.model.Person;
 @Component
 public class PersonValidator implements Validator {
 
-    private PersonDAO personDAO;
+    private final PersonDAO personDAO;
 
     @Autowired
     public PersonValidator(PersonDAO personDAO) {

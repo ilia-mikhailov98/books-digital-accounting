@@ -12,7 +12,7 @@ import java.util.List;
 @Component
 public class BookDAO {
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
     public BookDAO(JdbcTemplate jdbcTemplate) {

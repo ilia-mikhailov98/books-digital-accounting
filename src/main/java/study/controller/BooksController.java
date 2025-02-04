@@ -16,8 +16,8 @@ import javax.validation.Valid;
 @RequestMapping("/books")
 public class BooksController {
 
-    private BookDAO bookDAO;
-    private PersonDAO personDAO;
+    private final BookDAO bookDAO;
+    private final PersonDAO personDAO;
 
     @Autowired
     public BooksController(BookDAO bookDAO, PersonDAO personDAO) {
@@ -25,7 +25,7 @@ public class BooksController {
         this.personDAO = personDAO;
     }
 
-    @GetMapping()
+    @GetMapping
     public String allBooks(Model model) {
         model.addAttribute("books", bookDAO.findAll());
 
@@ -56,7 +56,7 @@ public class BooksController {
         return "books/new-book";
     }
 
-    @PostMapping()
+    @PostMapping
     public String createBook(@ModelAttribute("book") @Valid Book book, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "books/new-book";
